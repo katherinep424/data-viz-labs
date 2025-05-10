@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="description"	  content="Data Visualisation Exercise 1.2"/>
+	<meta name="keywords"		  content="HTML, CSS"/>
+	<meta name="author"			  content="Ngan Pham"/>
+
+	<title>Data Visualization Lab 1.2: JavaScript</title>
+
+	<style>
+
+		.navbar {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+			background-color: rgb(41, 59, 109);
+			display: flex;
+			justify-content: center;
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+		
+		.navbar li {
+			margin: 0;
+			float: left;
+		}
+		
+		.navbar li a {
+			display: block;
+			padding: 14px 20px;
+			color: white;
+			text-decoration: none;
+			font-weight: bold;
+			text-align: center;
+		}
+		
+		.navbar li a:hover:not(.active) {
+			background-color: rgb(41, 59, 109);
+		}
+		.navbar .active {
+			background-color: rgb(100, 105, 143);
+		}
+		
+		body {
+			margin: 0;
+			background-color: #f9f9f9;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			display: flex;
+			justify-content: center;
+		}
+		
+		.container {
+			max-width: 800px;
+			padding: 40px;
+			text-align: center;
+		}
+		
+		h1 {
+			color: rgb(41, 59, 109);
+			font-size: 2.5em;
+			margin-bottom: 0.2em;
+		}
+		
+		h2 {
+			color: #555;
+			font-weight: normal;
+			margin-top: 0;
+			margin-bottom: 1em;
+		}
+		
+		p, li {
+			line-height: 1.5;
+		}
+		
+		p, ul, figcaption, footer {
+			text-align: left;
+			margin: 0 auto 1em auto;
+		}
+		
+		img {
+			width: 100%;
+			max-width: max-content;
+			height: max-content;
+			border: none;
+			border-radius: 5px;
+			margin: 1em 0;
+		}
+		
+		figcaption {
+			font-size: 0.9em;
+			color: #666;
+			margin-top: 0.5em;
+			font-style: italic;
+            text-align: center;
+		}
+		
+		a {
+			color: #2a6ebb;
+			text-decoration: none;
+		}
+		
+		a:hover {
+			text-decoration: underline;
+		}
+
+        #chart-buttons {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        #chart-buttons button {
+        background-color: rgb(100, 105, 143);
+        color: white;
+        padding: 10px 16px;
+        margin: 0 6px;
+        border: none;
+        border-radius: 4px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        }
+          
+        #chart-buttons button:hover {
+        background-color: rgb(41, 59, 109);
+        }
+
+        #chart-buttons button.active {
+            background-color: rgb(70, 90, 130); 
+            color: white;
+        }
+
+          
+		footer {
+			padding-top: 1em;
+			border-top: 1px solid #ddd;
+			font-size: 0.9em;
+			color: #999;
+			text-align: center;
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<div class="container">
+		<ul class="navbar">
+			<li><a href="../Lab1.1/lab1.1.html">Lab 1.1</a></li>
+			<li><a class="active" href="./lab1.2.html">Lab 1.2</a></li>
+			<li><a href="../Lab1.3/lab1.3.html">Lab 1.3</a></li>
+		</ul>
+		
+		<h1>Pets and the Pandemic</h1>
+		<h2>Ngan Pham</h2>
+	
+		<p> 
+		A report from Animal Medicines Australia (AMA) has found that many Australians took the opportunity to introduce a pet into their household during the pandemic. 
+		Their survey indicated that there was a significant increase in the percent of households taking in a new dog, fish or bird. 
+		Their research also indicated that pets had a number of positive influences on their lives such as:
+		</p>
+	
+		<ul>
+		<li>Companionship</li>
+		<li>Better mental health</li>
+		<li>Joy and happiness</li>
+		</ul>
+	
+        <div id="chart-buttons">
+            <button onclick="showChart('2019')">2019</button>
+            <button onclick="showChart('2021')">2021</button>
+            <button onclick="showChart('Both')">Both</button>
+        </div>
+
+        <figure id="chart-figure">
+            <img id="chart-img" src="./data-viz/pet2019.png" alt="Bar chart showing pet ownership in 2019." />
+            <figcaption id="chart-caption">
+              Fig 2. Percent of most popular pets owned by Australians in 2019.
+            </figcaption>
+        </figure>
+
+        <script>
+            function showChart(year) {
+              const img = document.getElementById("chart-img");
+              const caption = document.getElementById("chart-caption");
+        
+              if (year === "2019") {
+                img.src = "./data-viz/pet2019.png";
+                img.alt = "Bar chart showing pet ownership in 2019";
+                caption.textContent =
+                  "Fig 2. Percent of most popular pets owned by Australians in 2019.";
+              } else if (year === "2021") {
+                img.src = "./data-viz/pet2021.png";
+                img.alt = "Bar chart showing pet ownership in 2021";
+                caption.textContent =
+                  "Fig 3. Percent of most popular pets owned by Australians in 2021.";
+              } else {
+                img.src = "./data-viz/2019vs2021.png";
+                img.alt = "Bar chart comparing pet ownership in 2019 and 2021";
+                caption.textContent =
+                  "Fig 4. Percent of most popular pets owned by Australians in 2019 and 2021.";
+              }
+
+              // Highlight the active button
+                const buttons = document.querySelectorAll("#chart-buttons button");
+                buttons.forEach(btn => btn.classList.remove("active"));
+                document.querySelector(`#chart-buttons button[onclick*="${year}"]`).classList.add("active");
+        
+            }
+          </script>
+
+		<p>
+		With the increase in pet ownership the AMA are encouraging policy makers to consider the needs of companion animals and their owners when considering rental, 
+		strata and body corporate regulations are well as accepting animals in public places and transport.
+		</p>
+	
+		<footer>COS30045 Data Visualisation</footer>
+	</div>
+
+</body>
+</html>
