@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+	<meta charset="UTF-8"/>
+	<meta name="description"	  content="Data Visualisation Exercise 2.2"/>
+	<meta name="keywords"		  content="HTML, CSS, D3"/>
+	<meta name="author"			  content="Ngan Pham"/>
+
+	<title>Data Visualization Lab 2.2: D3 Drawing with Data - Bar Chart</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="../style.css">
+
+</head>
+
+<body>
+
+    <div class="container">
+        <ul class="navbar">
+            <li><a href="../LabW02/lab2.1.html">Lab 2.1</a></li>
+            <li><a class="active" href="lab2.2.html">Lab 2.2</a></li>
+            <li><a href="../LabW02/lab2.3.html">Lab 2.3</a></li>
+            <li><a href="../LabW02/lab2.4.html">Lab 2.4</a></li>
+        </ul>
+
+        <h1>Drawing with Data - Bar Chart</h1>
+        
+        <div id="content-area"></div>
+
+        <footer>
+            COS30045 Data Visualisation<br>
+            Ngan Pham
+        </footer>
+    </div>
+
+    <script>
+        // Parse the CSV data
+        const csvData = `animal,pets2019,pets2021
+                            Dogs,40,47
+                            Cats,27,30
+                            Fish,11,13
+                            Birds,9,14
+                            Small M,3,5
+                            Reptiles,2,4
+                            Other Pets,2,1`;
+
+        // Parse the CSV data
+        const data = d3.csvParse(csvData);
+        
+        // Extract the 2021 data and convert to numbers
+        const dataset = data.map(d => ({
+            animal: d.animal,
+            value: parseInt(d.pets2021)
+        }));
+
+        // Set up the chart dimensions
+        const w = 800;
+        const h = 500;
+        const barPadding = 15;
+        const margin = { top: 40, right: 20, bottom: 80, left: 60 };
+        const innerWidth = w - margin.left - margin.right;
+        const innerHeight = h - margin.top - margin.bottom;
+
+        // Create the SVG element
+        const svg = d3.select("#content-area")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+
+        // Create a group for the chart area
+        const chart = svg.append("g")
+            .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+        // Calculate the width of each bar
+        const barWidth = innerWidth / dataset.length - barPadding;
+
+        // Create the bars
+        chart.selectAll("rect")
+            .data(dataset)
+            .enter()
+            .append("rect")
+            .attr("x", (d, i) => i * (barWidth + barPadding))
+            .attr("y", d => innerHeight - d.value * 8)
+            .attr("width", barWidth)
+            .attr("height", d => d.value * 8)
+            .attr("fill", "rgb(100, 105, 143)");
+
+        // Add value labels on top of the bars
+        chart.selectAll(".value-label")
+            .data(dataset)
+            .enter()
+            .append("text")
+            .attr("class", "value-label")
+            .text(d => d.value + "%")
+            .attr("x", (d, i) => i * (barWidth + barPadding) + barWidth / 2)
+            .attr("y", d => innerHeight - d.value * 8 - 10)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "12px")
+            .attr("font-weight", "bold")
+            .attr("fill", "black");
+
+        // Add animal name labels below the bars
+        chart.selectAll(".animal-label")
+            .data(dataset)
+            .enter()
+            .append("text")
+            .attr("class", "animal-label")
+            .text(d => d.animal)
+            .attr("x", (d, i) => i * (barWidth + barPadding) + barWidth / 2)
+            .attr("y", innerHeight + 20)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "12px")
+            .attr("fill", "black");
+
+        // Add Y-axis label
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 15)
+            .attr("x", -h/2)
+            .attr("text-anchor", "middle")
+            .text("Percentage of Households (%)");
+
+        // Add title
+        svg.append("text")
+            .attr("x", w/2)
+            .attr("y", margin.top/2)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "18px")
+            .attr("font-weight", "bold")
+            .text("Pet Ownership in Australia (2021)");
+    </script>
+
+
+</body>
+</html>

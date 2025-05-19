@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+	<meta charset="UTF-8"/>
+	<meta name="description"	  content="Data Visualisation Exercise 2.3"/>
+	<meta name="keywords"		  content="HTML, CSS, D3"/>
+	<meta name="author"			  content="Ngan Pham"/>
+
+	<title>Data Visualization Lab 2.3: D3 Drawing with Data - Scatter Plot</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="../style.css">
+
+</head>
+
+<body>
+
+    <div class="container">
+        <ul class="navbar">
+            <li><a href="../LabW02/lab2.1.html">Lab 2.1</a></li>
+            <li><a href="../LabW02/lab2.2.html">Lab 2.2</a></li>
+            <li><a class="active" href="lab2.3.html">Lab 2.3</a></li>
+            <li><a href="../LabW02/lab2.4.html">Lab 2.4</a></li>
+        </ul>
+
+        <h1>Drawing with Data - Scatter Plot</h1>
+        
+        <div id="content-area"></div>
+
+        <footer>
+            COS30045 Data Visualisation<br>
+            Ngan Pham
+        </footer>
+    </div>
+
+    <script>
+        // Dataset with a third value for radius
+        var dataset = [
+            [5, 20, 5],      // [x, y, radius]
+            [480, 90, 23],
+            [250, 50, 9],
+            [100, 33, 13],
+            [330, 95, 27],
+            [410, 12, 19],
+            [475, 44, 8],
+            [25, 67, 22],
+            [85, 21, 17],
+            [220, 88, 24]
+        ];
+
+        // Set up dimensions for SVG
+        var width = 850;
+        var height = 600;
+        var padding = 90;  // Padding for axes
+        
+        // Create SVG element
+        const svg = d3.select("#content-area")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+        
+        // Create scales for X and Y axes
+        var xScale = d3.scaleLinear()
+            .domain([0, d3.max(dataset, function(d) { return d[0]; })])
+            .range([padding, width - padding]);
+            
+        var yScale = d3.scaleLinear()
+            .domain([0, d3.max(dataset, function(d) { return d[1]; })])
+            .range([height - padding, padding]);
+        
+        // Create circles
+        svg.selectAll("circle")
+            .data(dataset)
+            .enter()
+            .append("circle")
+            .attr("cx", function(d) { return xScale(d[0]); })
+            .attr("cy", function(d) { return yScale(d[1]); })
+            .attr("r", function(d) { return d[2]; })  // Use third value for radius
+            .attr("fill", "rgb(100, 105, 143)")
+            .attr("opacity", 0.8);
+            
+        // Add labels
+        svg.selectAll("text.label")
+            .data(dataset)
+            .enter()
+            .append("text")
+            .attr("class", "label")
+            .attr("x", function(d) { return xScale(d[0]) + d[2] + 3; })
+            .attr("y", function(d) { return yScale(d[1]); })
+            .text(function(d) { return d[0] + "," + d[1] + " (r:" + d[2] + ")"; })
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "10px")
+            .attr("fill", "black");
+            
+        // Create X axis
+        var xAxis = d3.axisBottom(xScale);
+        svg.append("g")
+            .attr("class", "axis")
+            .attr("transform", "translate(0," + (height - padding) + ")")
+            .call(xAxis);
+            
+        // Create Y axis
+        var yAxis = d3.axisLeft(yScale);
+        svg.append("g")
+            .attr("class", "axis")
+            .attr("transform", "translate(" + padding + ",0)")
+            .call(yAxis);
+            
+        // Add X axis label
+        svg.append("text")
+            .attr("text-anchor", "middle")
+            .attr("transform", "translate(" + (width/2) + "," + (height - 40) + ")")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "12px")
+            .text("X Value");
+            
+        // Add Y axis label
+        svg.append("text")
+            .attr("text-anchor", "middle")
+            .attr("transform", "translate(" + 50 + "," + (height/2) + ")rotate(-90)")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "12px")
+            .text("Y Value");
+    </script>
+
+
+</body>
+</html>
